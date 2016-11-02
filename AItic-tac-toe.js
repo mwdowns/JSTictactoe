@@ -12,11 +12,12 @@ $(function() {
       $(this).addClass("O");
       $(this).text("O").css("color", "yellow");
       counter = 1;
-      turns +=1;
       var outernumber = parseInt($(this).parent("").attr("value"));
       var innernumber = parseInt($(this).attr("value"));
       oArray.push([outernumber, innernumber]);
       won(oArray);
+      robot();
+      turns +=1;
     } else if ($(this).hasClass("0") && counter === 1) {
       $(this).removeClass("0");
       $(this).addClass("X");
@@ -27,11 +28,9 @@ $(function() {
       var xinnernumber = parseInt($(this).attr("value"));
       xArray.push([xouternumber, xinnernumber]);
       won(xArray);
+      turns +=1;
     } else {
       return;
-    }
-    if (turns === 10) {
-      $(".banner").text("CAT!");
     }
 
   });
@@ -53,16 +52,17 @@ $(function() {
   });
 });
 
+var diagnalUp = [[2, 0], [1, 1], [0, 2]];
+var diagnalDown = [[0, 0], [1, 1], [2, 2]];
+var topRow = [[0, 0], [0, 1], [0, 2]];
+var middleRow = [[1, 0], [1, 1], [1, 2]];
+var bottomRow = [[2, 0], [2, 1], [2, 2]];
+var firstCol = [[0, 0], [1, 0], [2, 0]];
+var secondCol = [[0, 1], [1, 1], [2, 1]];
+var thirdCol = [[0, 2], [1, 2], [2, 2]];
+var winners = [diagnalUp, diagnalDown, topRow, middleRow, bottomRow, firstCol, secondCol, thirdCol];
+
 function won(player) {
-  var diagnalUp = [[2, 0], [1, 1], [0, 2]];
-  var diagnalDown = [[0, 0], [1, 1], [2, 2]];
-  var topRow = [[0, 0], [0, 1], [0, 2]];
-  var middleRow = [[1, 0], [1, 1], [1, 2]];
-  var bottomRow = [[2, 0], [2, 1], [2, 2]];
-  var firstCol = [[0, 0], [1, 0], [2, 0]];
-  var secondCol = [[0, 1], [1, 1], [2, 1]];
-  var thirdCol = [[0, 2], [1, 2], [2, 2]];
-  var winners = [diagnalUp, diagnalDown, topRow, middleRow, bottomRow, firstCol, secondCol, thirdCol];
 
   var Xwon = winners.some(function(combo) {
     return combo.every(function(comboCoord) {
@@ -92,7 +92,14 @@ function won(player) {
     $(".banner").text("O WINS!").css("color", "black");
     counter = 2;
     $(".oScore").text(oScore);
+  } else if (Xwon === false && Owon === false && turns === 10) {
+    $(".banner").text("CAT!");
   } else {
     return;
   }
+}
+
+function robot() {
+  $(".banner").text("Thinking...").delay(5000).fadeOut(400);
+  // $(".banner").fadeIn(200).delay(1000).fadeOut(200);
 }

@@ -1,5 +1,5 @@
 var counter = 0;
-var turns = true;
+var turns = 0;
 var xArray = [];
 var oArray =[];
 var xScore = 0;
@@ -7,17 +7,17 @@ var oScore = 0;
 
 $(function() {
   $(".square").click(function() {
-    if ($(this).hasClass("0") && counter === 0 && turns === true) {
+    if ($(this).hasClass("0") && counter === 0) {
       $(this).removeClass("0");
       $(this).addClass("O");
       $(this).text("O").css("color", "yellow");
       counter = 1;
-      console.log(counter);
       var outernumber = parseInt($(this).parent("").attr("value"));
       var innernumber = parseInt($(this).attr("value"));
       oArray.push([outernumber, innernumber]);
+      turns += 1;
       won(oArray);
-    } else if ($(this).hasClass("0") && counter === 1 && turns === true) {
+    } else if ($(this).hasClass("0") && counter === 1) {
       $(this).removeClass("0");
       $(this).addClass("X");
       $(this).text("X").css("color", "purple");
@@ -25,17 +25,11 @@ $(function() {
       var xouternumber = parseInt($(this).parent("").attr("value"));
       var xinnernumber = parseInt($(this).attr("value"));
       xArray.push([xouternumber, xinnernumber]);
+      turns += 1;
       won(xArray);
-      console.log(counter);
     } else {
       return;
     }
-
-    //  if {counter ===
-    //     $(".banner").text("CAT!");
-    //   }
-    // }
-
 
   });
   $(".new-game").click(function() {
@@ -95,7 +89,9 @@ function won(player) {
     $(".banner").text("O WINS!").css("color", "black");
     counter = 2;
     $(".oScore").text(oScore);
-  } else if (Xwon === false && Owon === false) {
-    turns = false;
+  } else if (Xwon === false && Owon === false && turns === 10) {
+    $(".banner").text("CAT!");
+  } else {
+    return;
   }
 }
